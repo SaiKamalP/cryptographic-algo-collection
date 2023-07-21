@@ -22,17 +22,19 @@ BigNumber::BigNumber(const std::string &binaryString){
 }
 BigNumber::BigNumber(const BigNumber &obj){
     init();
-    
+    for(int i=0;i<SIZE;i++){
+        dataStart[i]=obj.dataStart[i];
+    }
 }
 BigNumber::~BigNumber(){
     delete [] dataStart;
 }
 
 void BigNumber::init(){
-    base2p=4;
+    base2p=25;
     base=(1ll<<base2p);
     basem1=base-1;
-    SIZE=10; //can only be an even number.
+    SIZE=100; //can only be an even number.
     dataStart=new long long [SIZE]{};
     dataEnd=dataStart+(SIZE-1);
 }
@@ -146,7 +148,7 @@ void BigNumber::multiply(BigNumber &A,BigNumber &B,BigNumber &C){
         carry=newCarry;
     }
     if(carry){
-        //std::clog<<"log: Made an overflow multiplication "<<A<<" with "<<B<<std::endl;
+        std::clog<<"log: Made an overflow multiplication "<<A<<" with "<<B<<std::endl;
     }
 }
 
@@ -200,24 +202,27 @@ void BigNumber::mod(BigNumber &A,BigNumber &B,BigNumber &C, BigNumber &result){
         result.sub(result,B,result);
     }
 }
-
+void BigNumber::bie(BigNumber &A,BigNumber &B,BigNumber &modV,BigNumber &modVI,BigNumber &result){
+    result.clear();
+    BigNumber temp(1);
+    BigNumber power(A);
+    BigNumber temp2;
+    long long msbB=B.getMSB();
+    for(int i=0;i<msbB;i++){
+        if(B.get(i)){
+            temp2.multiply(power,temp,temp2);
+            temp.mod(temp2,modV,modVI,temp);
+        }
+        temp2.multiply(power,power,temp2);
+        power.mod(temp2,modV,modVI,power);
+    }
+    result.copy(temp);
+}
 void BigNumber::copy(BigNumber &A){
     for(int i=0;i<SIZE;i++){
         dataStart[i]=A.dataStart[i];
     }
 }
-// void BigNumber::add(BigNumber &B){
-//      long long carry=0;
-//     for(int i=0;i<SIZE;i++){
-//         long long q=(this->operator[](i)+B[i]+carry);
-//         this->operator[](i)=q&B.basem1;
-//         carry=q>>B.base2p;
-//     }
-//     if(carry){
-//         std::clog<<"log: Made an overflow addidion "<<*this<<" with "<<B<<std::endl;
-//     }
-// }
-
 std::string BigNumber::toString(){
     std::stringstream ss;
     for(int i=0;i<SIZE-1;i++){

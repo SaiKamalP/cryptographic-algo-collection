@@ -31,8 +31,8 @@ class BigNumber{
     static void multiply(BigNumber &A,BigNumber &B,BigNumber &result);
     static void divide(BigNumber &A,BigNumber &B,BigNumber &result);
     static void mod(BigNumber &A,BigNumber &B,BigNumber &BI, BigNumber & result);
+    static void bie(BigNumber &A,BigNumber &B,BigNumber &modV,BigNumber &modVI,BigNumber &result);
     void copy(BigNumber &A);
-    // void add(BigNumber &B);
 
     std::string toString();
     friend std::ostream& operator<<(std::ostream& stream,BigNumber& A);
