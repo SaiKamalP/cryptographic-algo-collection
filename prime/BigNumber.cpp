@@ -8,7 +8,7 @@ BigNumber::BigNumber(long long number){
     long long *endptr=dataEnd;
     while(number){
         if(endptr+1==dataStart){
-            //std::clog<<"log: Value too large to create"<<std::endl;
+            std::clog<<"log: Value too large to create"<<std::endl;
             break;
         }
         *endptr=number&basem1;
@@ -31,7 +31,7 @@ BigNumber::~BigNumber(){
 }
 
 void BigNumber::init(){
-    base2p=25;
+    base2p=30;
     base=(1ll<<base2p);
     basem1=base-1;
     SIZE=100; //can only be an even number.
